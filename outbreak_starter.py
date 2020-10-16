@@ -26,6 +26,7 @@ def readGraph(input_file):
             adj_list.append([int(index) for index in line])
     return N, s, adj_list
 
+
 def writeOutput(output_file, prob_infect, avg_day):
     with open(output_file, 'w') as f:
         for i in prob_infect:
@@ -75,6 +76,7 @@ def  BFS(N, s, adj_list):
 
 ########################################
 
+
 def model_outbreak(N, s, adj_list):
     # Again, you are given N, s, and the adj_list
     # You can also call your BFS algorithm in this function,
@@ -90,6 +92,7 @@ def model_outbreak(N, s, adj_list):
     # The first N lines of the file will have the probability infected for each node.
     # Then there will be a single space.
     # Then the following N lines will have the avg_day_infected for each node.
+    print(adj_list)
 
 
     return prob_infect, avg_day
