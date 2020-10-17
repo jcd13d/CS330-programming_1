@@ -70,10 +70,9 @@ def  BFS(N, s, adj_list):
     layer_counter = 0
     nodes_in_layer = [[]]
 
-    for source in [s]:
-        nodes_in_layer[0].append(source)
-        discovered[source] = True
-        level[source] = 0
+    nodes_in_layer[0].append(s)
+    discovered[s] = True
+    level[s] = 0
 
     while len(nodes_in_layer[layer_counter]) > 0:
         nodes_in_layer.append([])

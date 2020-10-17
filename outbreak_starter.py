@@ -1,4 +1,7 @@
 import sys
+import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
 import random
 
 ############################
@@ -77,12 +80,54 @@ def  BFS(N, s, adj_list):
 ########################################
 
 
+def viz_graph(adj_list, show=True, save=None, levels=None):
+
+    g_format = ["{0} ".format(i) + " ".join(map(str, x)) for i, x in enumerate(adj_list)]
+    G = nx.parse_adjlist(g_format, nodetype=int, create_using=nx.DiGraph)
+    # G = nx.parse_adjlist(g_format, nodetype=int, create_using=nx.Graph)
+
+    if levels is not None:
+        color_map = ['blue'] * len(adj_list)
+        for i, line in enumerate(nx.readwrite.adjlist.generate_adjlist(G)):
+            if levels[int(line.split(" ")[0])] != 'x':
+                color_map[i] = 'red'
+                # print("colored ", line)
+    else:
+        color_map = None
+
+    nx.draw(G, with_labels=True, node_color=color_map)
+
+    if show:
+        plt.show()
+
+    if save is not None:
+        plt.savefig(save)
+
+
+def GenRndInstance(adj_list, probability):
+    new_adj_list = []
+
+    for vertex, adj_nodes in enumerate(adj_list):
+        new_adj_list.append([])
+        for adj_node in adj_nodes:
+            if vertex == 0:
+                active = True
+            else:
+                active = random.random() <= probability
+            if active:
+                new_adj_list[vertex].append(adj_node)
+
+    return new_adj_list
+
+
+
 def model_outbreak(N, s, adj_list):
     # Again, you are given N, s, and the adj_list
     # You can also call your BFS algorithm in this function,
     # or write other functions to use here.
     # Return two lists of size n, where each entry represents one vertex:
-    prob_infect = [0]*N
+    # prob_infect = [0]*N
+    prob_infect = []
     # the probability that each node gets infected after a run of the experiment
     avg_day = ['inf']*N
     # the average day of infection for each node
@@ -92,7 +137,51 @@ def model_outbreak(N, s, adj_list):
     # The first N lines of the file will have the probability infected for each node.
     # Then there will be a single space.
     # Then the following N lines will have the avg_day_infected for each node.
-    print(adj_list)
+
+    print(adj_list[463])
+    infect = [[] for i in range(N)]
+    day = [[] for i in range(N)]
+
+    iterations = 100
+    count = 0
+
+    for i in range(iterations):
+        # infect[i] = [0]*N
+        # day[i] = []
+
+        rnd_adj_list = adj_list
+        rnd_adj_list = [[i + 1 for i in row] for row in rnd_adj_list]
+        rnd_adj_list.insert(0, [])
+        for source in s:
+            rnd_adj_list[0].append(source + 1)      # add 1 because we increased the node numbers by 1 w insert
+
+        rnd_adj_list = GenRndInstance(rnd_adj_list, probability=0.3)
+
+        # bfs = BFS(N=len(adj_list), s=0, adj_list=adj_list)
+        levels = BFS(N=len(rnd_adj_list), s=0, adj_list=rnd_adj_list)
+        for i, dist in enumerate(levels):
+            # print(i)
+                # print(infect[i - 1])
+                # print(infect[2])
+            if (dist != 'x') and (i != 0):
+                # print("!!!!", dist, i)
+                infect[i - 1].append(1)
+                # TODO is this distance supposed to be indexed from 1 or 0 (we added a source node)
+                day[i - 1].append(dist)
+            elif dist == 'x':
+                infect[i - 1].append(0)
+
+    prob_infect = np.array(infect).mean(1)
+    avg_day = day
+    for i, row in enumerate(avg_day):
+        if len(row) > 0:
+            avg_day[i] = np.mean(list(row))
+        else:
+            avg_day[i] = "inf"
+
+
+    # viz_graph(rnd_adj_list, show=True, levels=bfs)
+    # viz_graph(adj_list, show=True)
 
 
     return prob_infect, avg_day

@@ -1,4 +1,5 @@
 from breadth_first_search import BFS
+from outbreak_starter import BFS as BFS2
 
 
 if __name__ == "__main__":
@@ -7,3 +8,5 @@ if __name__ == "__main__":
     N = 8
 
     print(BFS(N, source, adj_list))
+    print(BFS2(N, source, adj_list))
+    print(BFS2(len(adj_list), source, adj_list))
