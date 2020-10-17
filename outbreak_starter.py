@@ -121,7 +121,8 @@ def GenRndInstance(adj_list, probability):
 
 
 
-def model_outbreak(N, s, adj_list):
+# TODO am i allowed to add argument here
+def model_outbreak(N, s, adj_list, probability):
     # Again, you are given N, s, and the adj_list
     # You can also call your BFS algorithm in this function,
     # or write other functions to use here.
@@ -155,7 +156,7 @@ def model_outbreak(N, s, adj_list):
         for source in s:
             rnd_adj_list[0].append(source + 1)      # add 1 because we increased the node numbers by 1 w insert
 
-        rnd_adj_list = GenRndInstance(rnd_adj_list, probability=0.3)
+        rnd_adj_list = GenRndInstance(rnd_adj_list, probability=probability)
 
         # bfs = BFS(N=len(adj_list), s=0, adj_list=adj_list)
         levels = BFS(N=len(rnd_adj_list), s=0, adj_list=rnd_adj_list)
