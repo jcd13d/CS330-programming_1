@@ -1,0 +1,36 @@
+{
+  "20201018203108_grid_shortcut_1_output": [
+    {
+      "probability": 0.1,
+      "infected_node_count": 131
+    },
+    {
+      "probability": 0.3,
+      "infected_node_count": 1024
+    },
+    {
+      "probability": 0.5,
+      "infected_node_count": 1024
+    },
+    {
+      "probability": 0.7,
+      "infected_node_count": 1024
+    },
+    {
+      "probability": 0.1,
+      "mean_days_to_infect": 4.807927737711152
+    },
+    {
+      "probability": 0.3,
+      "mean_days_to_infect": 21.294955763737505
+    },
+    {
+      "probability": 0.5,
+      "mean_days_to_infect": 10.257100416823121
+    },
+    {
+      "probability": 0.7,
+      "mean_days_to_infect": 7.634893883429662
+    }
+  ]
+}

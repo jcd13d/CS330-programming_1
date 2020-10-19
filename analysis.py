@@ -53,6 +53,7 @@ def avg_time_to_infect(days_till_infect, output_list):
 
 
 def probability_dist_plot(probabilities, graph, path=None, show=False):
+    plt.figure(figsize=(4.5, 3))
     for probability, data in probabilities.items():
         data = sorted(data, reverse=True)
         plt.plot(np.linspace(0, len(data), len(data)), data, label="p = {0}".format(probability))
@@ -61,6 +62,7 @@ def probability_dist_plot(probabilities, graph, path=None, show=False):
     plt.ylabel("Probability of Infection")
     plt.xlabel("Nodes")
     plt.grid(True, which='both')
+    plt.tight_layout()
 
     if show:
         plt.show()
@@ -77,6 +79,7 @@ def histogram_days(days_till_infect, graph, path=None, show=False):
         data = np.round(data[data != 'inf'].astype('float64')).astype('int')
         max_ = np.max(data) if np.max(data) > max_ else max_
 
+    plt.figure(figsize=(4, 3))
     for probability, data in days_till_infect.items():
         data = np.array(data)
         data = np.round(data[data != 'inf'].astype('float64')).astype('int')
@@ -87,11 +90,14 @@ def histogram_days(days_till_infect, graph, path=None, show=False):
             plt.xlabel("Day Infected")
             plt.ylabel("Number of Nodes")
             plt.legend()
+            plt.grid()
+            plt.tight_layout()
             if show:
                 plt.show()
             if path is not None:
                 plt.savefig(os.path.join(path, "histogram_{0}_{1}.jpg".format(graph, probability)))
                 plt.close()
+            plt.figure(figsize=(4, 3))
 
 
 def main(args=[]):
@@ -115,5 +121,6 @@ def main(args=[]):
         json.dump(master_output, f)
 
 
+# TODO: need to subtract 1 day from each because of source
 if __name__ == "__main__":
     main(sys.argv[1:])

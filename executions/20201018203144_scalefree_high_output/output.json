@@ -1,0 +1,36 @@
+{
+  "20201018203144_scalefree_high_output": [
+    {
+      "probability": 0.1,
+      "infected_node_count": 1000
+    },
+    {
+      "probability": 0.3,
+      "infected_node_count": 1000
+    },
+    {
+      "probability": 0.5,
+      "infected_node_count": 1000
+    },
+    {
+      "probability": 0.7,
+      "infected_node_count": 1000
+    },
+    {
+      "probability": 0.1,
+      "mean_days_to_infect": 6.945161269820978
+    },
+    {
+      "probability": 0.3,
+      "mean_days_to_infect": 4.401779959416616
+    },
+    {
+      "probability": 0.5,
+      "mean_days_to_infect": 3.677950005739094
+    },
+    {
+      "probability": 0.7,
+      "mean_days_to_infect": 3.322791455638403
+    }
+  ]
+}
