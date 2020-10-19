@@ -15,8 +15,8 @@ def readGraph(input_file):
         raw = [line.split(',') for line in f.read().splitlines()]
 
     N = int(raw[0][0])
-    print(raw)
-    print(N)
+    # print(raw)
+    # print(N)
     sin = raw[1]
     s = []
     for st in sin:
@@ -121,16 +121,13 @@ def GenRndInstance(adj_list, probability):
 
 
 
-# TODO am i allowed to add argument here
-def model_outbreak(N, s, adj_list, probability):
+def model_outbreak(N, s, adj_list):
     # Again, you are given N, s, and the adj_list
     # You can also call your BFS algorithm in this function,
     # or write other functions to use here.
     # Return two lists of size n, where each entry represents one vertex:
     # prob_infect = [0]*N
-    prob_infect = []
     # the probability that each node gets infected after a run of the experiment
-    avg_day = ['inf']*N
     # the average day of infection for each node
     # (you can write 'inf' for infinity if the node is never infected)
     # The code will write this information to a single text file.
@@ -139,51 +136,51 @@ def model_outbreak(N, s, adj_list, probability):
     # Then there will be a single space.
     # Then the following N lines will have the avg_day_infected for each node.
 
-    print(adj_list[463])
-    infect = [[] for i in range(N)]
-    day = [[] for i in range(N)]
+    iterations = 1000
+    probabilities = (0.1, 0.3, 0.5, 0.7)
 
-    iterations = 100
-    count = 0
+    prob_infect = []
+    avg_day = []
 
-    for i in range(iterations):
-        # infect[i] = [0]*N
-        # day[i] = []
+    for probability in probabilities:
+        infect = [[] for i in range(N)]
+        day = [[] for i in range(N)]
+        for i in range(iterations):
+            rnd_adj_list = adj_list
+            rnd_adj_list = [[i + 1 for i in row] for row in rnd_adj_list]
+            rnd_adj_list.insert(0, [])
+            for source in s:
+                rnd_adj_list[0].append(source + 1)      # add 1 because we increased the node numbers by 1 w insert
 
-        rnd_adj_list = adj_list
-        rnd_adj_list = [[i + 1 for i in row] for row in rnd_adj_list]
-        rnd_adj_list.insert(0, [])
-        for source in s:
-            rnd_adj_list[0].append(source + 1)      # add 1 because we increased the node numbers by 1 w insert
+            rnd_adj_list = GenRndInstance(rnd_adj_list, probability=probability)
 
-        rnd_adj_list = GenRndInstance(rnd_adj_list, probability=probability)
+            # bfs = BFS(N=len(adj_list), s=0, adj_list=adj_list)
+            levels = BFS(N=len(rnd_adj_list), s=0, adj_list=rnd_adj_list)
+            for i, dist in enumerate(levels):
+                if (dist != 'x') and (i != 0):
+                    infect[i - 1].append(1.0)
+                    # TODO is this distance supposed to be indexed from 1 or 0 (we added a source node)
+                    day[i - 1].append(dist)
+                elif dist == 'x':
+                    infect[i - 1].append(0.0)
 
-        # bfs = BFS(N=len(adj_list), s=0, adj_list=adj_list)
-        levels = BFS(N=len(rnd_adj_list), s=0, adj_list=rnd_adj_list)
-        for i, dist in enumerate(levels):
-            # print(i)
-                # print(infect[i - 1])
-                # print(infect[2])
-            if (dist != 'x') and (i != 0):
-                # print("!!!!", dist, i)
-                infect[i - 1].append(1)
-                # TODO is this distance supposed to be indexed from 1 or 0 (we added a source node)
-                day[i - 1].append(dist)
-            elif dist == 'x':
-                infect[i - 1].append(0)
+        # infect = np.array(infect).mean(1, dtype=np.float64)
+        infect = np.mean(np.array(infect), axis=1, dtype=np.float64)
+        # print(infect)
+        for i, (row_day, row_infect) in enumerate(zip(day, infect)):
+            # infect[i] = np.mean((row_infect))
+            if len(row_day) > 0:
+                day[i] = np.mean(list(row_day))
+            else:
+                day[i] = "inf"
 
-    prob_infect = np.array(infect).mean(1)
-    avg_day = day
-    for i, row in enumerate(avg_day):
-        if len(row) > 0:
-            avg_day[i] = np.mean(list(row))
-        else:
-            avg_day[i] = "inf"
+        prob_infect.extend(infect)
+        avg_day.extend(day)
 
 
-    # viz_graph(rnd_adj_list, show=True, levels=bfs)
+    # viz_graph(rnd_adj_list, show=True, levels=levels)
     # viz_graph(adj_list, show=True)
-
+    # print(infect)
 
     return prob_infect, avg_day
 

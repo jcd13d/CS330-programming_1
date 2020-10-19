@@ -1,0 +1,36 @@
+{
+  "20201018161429_grid_4_output": [
+    {
+      "probability": 0.1,
+      "infected_node_count": 56
+    },
+    {
+      "probability": 0.3,
+      "infected_node_count": 417
+    },
+    {
+      "probability": 0.5,
+      "infected_node_count": 1024
+    },
+    {
+      "probability": 0.7,
+      "infected_node_count": 1024
+    },
+    {
+      "probability": 0.1,
+      "mean_days_to_infect": 3.7859855925438035
+    },
+    {
+      "probability": 0.3,
+      "mean_days_to_infect": 12.985424438891886
+    },
+    {
+      "probability": 0.5,
+      "mean_days_to_infect": 28.028147336151626
+    },
+    {
+      "probability": 0.7,
+      "mean_days_to_infect": 17.72074492285826
+    }
+  ]
+}
